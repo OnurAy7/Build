@@ -1,10 +1,10 @@
-import { StyleSheet, Image, Text, Button, View } from 'react-native'
+import { StyleSheet, Image, Text, Button, View, SafeAreaView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 
 export default function WelcomeScreen({ navigation }) {
   return (
-    <View >
+    <SafeAreaView>
       <Text style={styles.title}>Welcome to GameLink</Text>
       <Text style={styles.message}>
         Prepare for exciting gaming adventures with other gamers. Prepare to
@@ -30,7 +30,7 @@ export default function WelcomeScreen({ navigation }) {
         />
       </View>
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 

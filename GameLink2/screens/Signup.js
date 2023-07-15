@@ -1,22 +1,40 @@
-import { StyleSheet, Button, Text, View } from 'react-native';
-import React from 'react';
+import { initializeApp } from 'firebase/app';
+import { StyleSheet, Button, Text, View, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
-export default function SignUp({ navigation }) {
+
+const SignUp = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  };
+
   return (
-    <View style ={styles.container}>
-      <Text style={styles.title}>
-        Sign Up
-      </Text>
-      <Text style={styles.message}>
-        Fill in the details
-      </Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.message}>Fill in the details</Text>
       <View style={styles.inputContainer}>
         <Icon name="user" size={20} color="gray" style={styles.icon} />
         <TextInput
-          placeholder='Username' 
+          placeholder='Email'
           style={styles.input}
+          onChangeText={(text) => setEmail(text)}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -25,6 +43,7 @@ export default function SignUp({ navigation }) {
           placeholder='Password'
           secureTextEntry={true}
           style={styles.input}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -39,19 +58,17 @@ export default function SignUp({ navigation }) {
           style={styles.input}
         />
       </View>
-      <View style ={styles.signupButton}>
+      <View style={styles.signupButton}>
         <Button
           title="Sign Up"
-          onPress={() => {
-            
-          }}
+          onPress={handleSignUp}
           color="#0827F5"
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
-
+export default SignUp;
 
 
 const styles = StyleSheet.create({

@@ -1,11 +1,16 @@
-import { StyleSheet, Button, Text, View } from 'react-native';
+import { StyleSheet, Button, Text, View, SafeAreaView } from 'react-native';
 import React from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+
+
+
 
 export default function SignIn({ navigation }) {
   return (
-    <View style ={styles.container}>
+    <SafeAreaView style ={styles.container}>
       <Text style={styles.title}>
         Login
       </Text>
@@ -43,7 +48,7 @@ export default function SignIn({ navigation }) {
           color="#FF0000"
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
