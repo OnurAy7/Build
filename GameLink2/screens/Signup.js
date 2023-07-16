@@ -41,7 +41,7 @@ export default function SignUn({ navigation }) {
       <Text style={styles.title}>Sign Up</Text>
       <Text style={styles.message}>Fill in the details</Text>
       <View style={styles.inputContainer}>
-        <Icon name="user" size={20} color="gray" style={styles.icon} />
+        <Icon name="envelope" size={20} color="gray" style={styles.icon} />
         <TextInput
           placeholder='Email'
           style={styles.input}

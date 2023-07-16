@@ -1,13 +1,20 @@
 import { StyleSheet, Image, Text, Button, View, SafeAreaView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Home({ navigation }) {
   return (
     <SafeAreaView>
-      <Text style={styles.title}>Welcome to GameLink</Text>
+      <Text style={styles.title}>Home Screen</Text>
       <Text style={styles.message}>
-        
+      <View style ={styles.buttonContainer}>
+        <Button
+          title="Messages"
+          onPress={() => navigation.navigate('Chat')}
+          color="grey"
+        />
+      </View>
       </Text>
     </SafeAreaView>
   );
@@ -32,6 +39,8 @@ const styles = StyleSheet.create({
         width: 200,
         borderRadius: 15,
         overflow: 'hidden',
-
       },
+      icon: {
+        marginRight: 10,
+      }
 })

@@ -46,7 +46,7 @@ export default function SignIn({ navigation }) {
         Sign in to continue
       </Text>
       <View style={styles.inputContainer}>
-        <Icon name="user" size={20} color="gray" style={styles.icon} />
+        <Icon name="envelope" size={20} color="gray" style={styles.icon} />
         <TextInput
           placeholder='Email' 
           style={styles.input}
