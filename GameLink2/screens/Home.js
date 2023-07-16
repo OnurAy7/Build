@@ -1,11 +1,14 @@
-import { StyleSheet, Image, Text, Button, View, SafeAreaView, Alert } from 'react-native'
+import { StyleSheet, Image, Text, Button, View, SafeAreaView, Alert, TouchableOpacity } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { getAuth, signOut } from "firebase/auth";
+import { useNavigation } from '@react-navigation/native';
 
 
-export default function Home({ navigation }) {
+
+export default function Home({}) {
+    const navigation = useNavigation();
     const Logout = () => {
         const auth = getAuth();
         signOut(auth)
@@ -21,14 +24,16 @@ export default function Home({ navigation }) {
       };
   return (
     <SafeAreaView>
-      <Text style={styles.title}>Home Screen</Text>
-      <View style ={styles.buttonContainer}>
-        <Button
-          title="Messages"
-          onPress={() => navigation.navigate('Chat')}
-          color="#0827F5"
-        />
-      </View>
+    
+    {/* Header */}
+        <View>
+            <TouchableOpacity onPress={() => navigation.navigate('Chat')} style={styles.send}>
+                <Icon name="send" size={30} color="#0827F5"/>
+            </TouchableOpacity>
+        </View>
+
+    {/* End of Header */}
+
       <View style ={styles.buttonContainer}>
         <Button
           title="Logout"
@@ -41,18 +46,7 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
-    title: {
-        fontSize: 36,
-        fontWeight: 'bold',
-        marginTop: 70,
-        marginBottom: 50,
-        textAlign: 'center',
-      },
-      message: {
-        fontSize: 18,
-        textAlign: 'center',
-      },
+      
       buttonContainer: {
         marginVertical: 150,
         marginHorizontal: 110,
@@ -60,7 +54,10 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         overflow: 'hidden',
       },
-      icon: {
-        marginRight: 10,
+      send: {
+        marginTop: 40,
+        width: 30,
+        alignSelf: 'flex-end',
+        marginHorizontal: 10,
       }
 })
