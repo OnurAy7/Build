@@ -1,5 +1,5 @@
-import { StyleSheet, Button, Text, View, SafeAreaView } from 'react-native';
-import React from 'react';
+import { StyleSheet, Button, Text, View, SafeAreaView, Alert } from 'react-native';
+import React, { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -7,8 +7,36 @@ import { auth } from "../firebase";
 
 
 
-
 export default function SignIn({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignIn = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      // Access the signed-in user
+      const user = userCredential.user;
+      console.log('Signed in:', user.email);
+      navigation.navigate('Home');
+
+    } catch (error) {
+      // Handle sign-in errors
+      console.error('Sign In Failed:', error.message);
+
+      let errorMessage = 'An error occurred. Please try again.';
+
+      if (
+        error.code === 'auth/invalid-email' ||
+        error.code === 'auth/user-not-found' ||
+        error.code === 'auth/wrong-password'
+      ) {
+        errorMessage = 'Incorrect Email or Password.';
+      }
+  
+      Alert.alert('Sign In Failed', errorMessage);
+    }
+  };
+
   return (
     <SafeAreaView style ={styles.container}>
       <Text style={styles.title}>
@@ -20,8 +48,12 @@ export default function SignIn({ navigation }) {
       <View style={styles.inputContainer}>
         <Icon name="user" size={20} color="gray" style={styles.icon} />
         <TextInput
-          placeholder='Username' 
+          placeholder='Email' 
           style={styles.input}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
       </View>
       <View style={styles.inputContainer}>
@@ -30,14 +62,15 @@ export default function SignIn({ navigation }) {
           placeholder='Password'
           secureTextEntry={true}
           style={styles.input}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+          autoCapitalize="none"
         />
       </View>
       <View style ={styles.signinButton}>
         <Button
           title="Sign In"
-          onPress={() => {
-            
-          }}
+          onPress={handleSignIn}
           color="#0827F5"
         />
       </View>

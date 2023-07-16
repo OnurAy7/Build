@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { StyleSheet, Button, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Button, Text, View, SafeAreaView, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -7,7 +7,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
 
-const SignUp = () => {
+export default function SignUn({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -16,12 +16,23 @@ const SignUp = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // ...
+        console.log('User created:', user);
+        Alert.alert('User Created', 'The user has been successfully created.');
+        navigation.navigate('SignIn');
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
+        
+        console.error('Error creating user:', errorMessage);
+        let errorMessage = 'An error occurred. Please try again.';
+        
+        if (
+          error.code === 'auth/invalid-email'
+        ) {
+          errorMessage = 'Invalid Email.';
+        }
+    
+        Alert.alert('Sign In Failed', errorMessage);
+
       });
   };
 
@@ -35,6 +46,13 @@ const SignUp = () => {
           placeholder='Email'
           style={styles.input}
           onChangeText={(text) => setEmail(text)}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Icon name="user" size={20} color="gray" style={styles.icon} />
+        <TextInput
+          placeholder='Username'
+          style={styles.input}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -54,7 +72,7 @@ const SignUp = () => {
       </View>
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder='Games'
+          placeholder='Favourite Game'
           style={styles.input}
         />
       </View>
@@ -68,7 +86,6 @@ const SignUp = () => {
     </SafeAreaView>
   );
 }
-export default SignUp;
 
 
 const styles = StyleSheet.create({
