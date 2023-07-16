@@ -1,21 +1,41 @@
-import { StyleSheet, Image, Text, Button, View, SafeAreaView } from 'react-native'
+import { StyleSheet, Image, Text, Button, View, SafeAreaView, Alert } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { getAuth, signOut } from "firebase/auth";
+
 
 export default function Home({ navigation }) {
+    const Logout = () => {
+        const auth = getAuth();
+        signOut(auth)
+          .then(() => {
+            console.log('logged Out');
+            Alert.alert('Logged Out');
+            // Navigate to the login screen or any other desired screen
+            navigation.navigate('SignIn');
+          })
+          .catch((error) => {
+            console.log('Error logging out:', error);
+          });
+      };
   return (
     <SafeAreaView>
       <Text style={styles.title}>Home Screen</Text>
-      <Text style={styles.message}>
       <View style ={styles.buttonContainer}>
         <Button
           title="Messages"
           onPress={() => navigation.navigate('Chat')}
-          color="grey"
+          color="#0827F5"
         />
       </View>
-      </Text>
+      <View style ={styles.buttonContainer}>
+        <Button
+          title="Logout"
+          onPress= {Logout}
+          color="#0827F5"
+        />
+      </View>
     </SafeAreaView>
   );
 }
