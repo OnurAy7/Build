@@ -4,16 +4,6 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
-import Swiper from 'react-native-deck-swiper'
-
-const DUMMY_DATA = [
-  {
-    username: "",
-    aboutme: "",
-    favouritegame: ""
-  }
-]
-
 
 export default function Home({}) {
     const navigation = useNavigation();
