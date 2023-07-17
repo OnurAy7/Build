@@ -29,13 +29,11 @@ export default function Home({}) {
             </TouchableOpacity>
         </View>
 
-      <View style ={styles.buttonContainer}>
-        <Button
-          title="Logout"
-          onPress= {Logout}
-          color="#0827F5"
-        />
-      </View>
+        <View>
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profile}>
+                <Icon name="user" size={30} color="#0827F5"/>
+            </TouchableOpacity>
+        </View>
     </SafeAreaView>
   );
 }
@@ -51,8 +49,19 @@ const styles = StyleSheet.create({
       },
       send: {
         marginTop: 40,
-        width: 30,
-        alignSelf: 'flex-end',
+        width: 40,
         marginHorizontal: 10,
+        alignSelf: 'flex-end',
+        position: 'absolute',
+
+      },
+      profile: {
+        marginTop: 40,
+        width: 30,
+        alignSelf: 'flex-start',
+        marginHorizontal: 10,
+        position: 'absolute',
+
       }
+      
 })

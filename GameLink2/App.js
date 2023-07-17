@@ -9,6 +9,8 @@ import SignIn from './screens/SignIn';
 import SignUp from './screens/Signup';
 import Home from './screens/Home';
 import Chat from './screens/Chat';
+import Messages from './screens/Messages';
+import Profile from './screens/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,16 @@ export default function App() {
           <Stack.Screen
           name="Chat"
           component={Chat}
+          Screen options={{headerShown: false}}
+          />
+          <Stack.Screen
+          name="Messages"
+          component={Messages}
+          Screen options={{headerShown: false}}
+          />
+          <Stack.Screen
+          name="Profile"
+          component={Profile}
           Screen options={{headerShown: false}}
           />
       </Stack.Navigator>
