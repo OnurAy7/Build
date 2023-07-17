@@ -4,7 +4,15 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
+import Swiper from 'react-native-deck-swiper'
 
+const DUMMY_DATA = [
+  {
+    username: "",
+    aboutme: "",
+    favouritegame: ""
+  }
+]
 
 
 export default function Home({}) {
@@ -24,15 +32,11 @@ export default function Home({}) {
       };
   return (
     <SafeAreaView>
-    
-    {/* Header */}
         <View>
             <TouchableOpacity onPress={() => navigation.navigate('Chat')} style={styles.send}>
                 <Icon name="send" size={30} color="#0827F5"/>
             </TouchableOpacity>
         </View>
-
-    {/* End of Header */}
 
       <View style ={styles.buttonContainer}>
         <Button
