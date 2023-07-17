@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 
+
 export default function Home({}) {
     const navigation = useNavigation();
     const Logout = () => {
