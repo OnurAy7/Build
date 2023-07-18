@@ -64,31 +64,34 @@ export default function Home({}) {
 
   return (
     <SafeAreaView>
-      <View>
+      <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.navigate('Chat')} style={styles.send}>
           <Icon name="send" size={30} color="#0827F5" />
         </TouchableOpacity>
-      </View>
 
-      <View>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profile}>
           <Icon name="user" size={30} color="#0827F5" />
         </TouchableOpacity>
-      </View>
 
-      <View>
         {users.length > 0 && currentIndex < users.length ? (
           <View>
             <Image source={{ uri: users[currentIndex].profileImageUrl }} style={styles.profileImage} />
-            <Text style={styles.username}>{users[currentIndex].username}</Text>
-            <Text style={styles.aboutMe}>{users[currentIndex].aboutMe}</Text>
-            <Text style={styles.favouriteGame}>{users[currentIndex].favoriteGame}</Text>
-            <TouchableOpacity onPress={handleNotMatch} style={styles.notMatchButton}>
-              <Text>Not Match</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleMatch} style={styles.matchButton}>
-              <Text>Match</Text>
-            </TouchableOpacity>
+            <View style={styles.detailsContainer}>
+              <Text style={styles.label}>Username:</Text>
+              <Text style={styles.detail}>{users[currentIndex].username}</Text>
+              <Text style={styles.label}>About Me:</Text>
+              <Text style={styles.detail}>{users[currentIndex].aboutMe}</Text>
+              <Text style={styles.label}>Favorite Game:</Text>
+              <Text style={styles.detail}>{users[currentIndex].favoriteGame}</Text>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={handleMatch} style={styles.thumbUpButton}>
+                <Icon name="thumbs-up" size={80} color="green" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleNotMatch} style={styles.thumbDownButton}>
+                <Icon name="thumbs-down" size={80} color="red" />
+              </TouchableOpacity>
+            </View>
           </View>
         ) : (
           <View style={styles.messageContainer}>
@@ -101,48 +104,42 @@ export default function Home({}) {
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    marginVertical: 150,
-    marginHorizontal: 110,
-    width: 200,
-    borderRadius: 15,
-    overflow: 'hidden',
+  container: {
+    position: 'relative',
   },
   send: {
-    marginTop: 40,
-    width: 40,
-    marginHorizontal: 10,
-    alignSelf: 'flex-end',
     position: 'absolute',
+    top: 40,
+    right: 10,
+    zIndex: 1,
   },
   profile: {
+    position: 'absolute',
+    top: 40,
+    left: 10,
+    zIndex: 1,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 40,
-    width: 30,
-    alignSelf: 'flex-start',
-    marginHorizontal: 10,
-    position: 'absolute',
+    marginHorizontal: 80,
   },
-  notMatchButton: {
-    width: '40%',
-    height: 40,
-    backgroundColor: 'red',
+  thumbUpButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 130,
-    marginVertical: 750,
-    borderRadius: 10,
-    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'rgba(0, 255, 0, 0.3)',
   },
-  matchButton: {
-    width: '40%',
-    height: 40,
-    backgroundColor: 'green',
+  thumbDownButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 130,
-    marginVertical: 700,
-    borderRadius: 10,
-    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'rgba(255, 0, 0, 0.3)',
   },
   messageContainer: {
     position: 'absolute',
@@ -155,22 +152,28 @@ const styles = StyleSheet.create({
     marginVertical: 400,
     marginHorizontal: 105,
   },
-  username: {
-    fontSize: 20,
-    position: 'absolute',
-    marginVertical: 300,
-    marginHorizontal: 105,
+  profileImage: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginTop: 100,
+    marginBottom: 10,
+    borderRadius: 50,
   },
-  aboutMe: {
-    fontSize: 20,
-    position: 'absolute',
-    marginVertical: 350,
-    marginHorizontal: 105,
+  detailsContainer: {
+    backgroundColor: '#bab8b8',
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 20,
+    marginHorizontal: 40,
   },
-  favouriteGame: {
+  label: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  detail: {
     fontSize: 20,
-    position: 'absolute',
-    marginVertical: 400,
-    marginHorizontal: 105,
+    marginBottom: 10,
   },
 });
