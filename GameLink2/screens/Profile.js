@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import * as ImagePicker from 'expo-image-picker'; // Import Expo ImagePicker
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Profile = ({ navigation }) => {
@@ -51,9 +52,27 @@ const Profile = ({ navigation }) => {
     }
   };
 
-  const handleChooseImage = () => {
-    // Implement image selection logic here (e.g., using ImagePicker)
-    // Set the selected image to the `profileImage` state variable
+  const handleChooseImage = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (permissionResult.granted === false) {
+        Alert.alert('Permission to access camera roll is required!');
+        return;
+      }
+
+      const pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!pickerResult.cancelled) {
+        setProfileImage(pickerResult.uri);
+      }
+    } catch (error) {
+      console.log('Error choosing image:', error);
+    }
   };
 
   const handleUploadImage = async () => {
@@ -62,7 +81,9 @@ const Profile = ({ navigation }) => {
       const user = auth.currentUser;
       const storage = getStorage();
       const storageRef = ref(storage, `profileImages/${user.uid}`);
-      await uploadBytes(storageRef, profileImage);
+      const response = await fetch(profileImage);
+      const blob = await response.blob();
+      await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
       setProfileImageUrl(downloadURL);
     } catch (error) {
