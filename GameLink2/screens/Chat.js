@@ -13,7 +13,7 @@ const ChatList = () => {
   const db = getFirestore();
 
   useEffect(() => 
-    onSnapshot(query(collection(db, 'matches'), where(usersMatched,
+    onSnapshot(query(collection(db, 'matches'), where(matchedUsers,
       'array-contains' ,  user.uid)),
        (snapShot) => 
        setMatches(

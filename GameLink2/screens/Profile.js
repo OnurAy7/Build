@@ -1,12 +1,17 @@
-import { StyleSheet, Image, Text, Button, View, SafeAreaView, Alert } from 'react-native';
+import { StyleSheet, Image, Text, Button, View, SafeAreaView, Alert, TextInput, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Profile = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [aboutMe, setAboutMe] = useState('');
   const [favoriteGame, setFavoriteGame] = useState('');
+  const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
 
   const fetchUserData = async () => {
     try {
@@ -20,6 +25,7 @@ const Profile = ({ navigation }) => {
         setUsername(data.username);
         setAboutMe(data.aboutMe);
         setFavoriteGame(data.favoriteGame);
+        setProfileImageUrl(data.profileImageUrl);
       }
     } catch (error) {
       console.log('Error fetching user data:', error);
@@ -29,6 +35,40 @@ const Profile = ({ navigation }) => {
   useEffect(() => {
     fetchUserData();
   }, []);
+
+  const updateProfile = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const db = getFirestore();
+      const userDoc = doc(db, 'users', user.uid);
+      await updateDoc(userDoc, { username, aboutMe, favoriteGame, profileImageUrl });
+      console.log('Profile updated successfully');
+      Alert.alert('Profile Updated');
+      setIsEditing(false);
+    } catch (error) {
+      console.log('Error updating profile:', error);
+    }
+  };
+
+  const handleChooseImage = () => {
+    // Implement image selection logic here (e.g., using ImagePicker)
+    // Set the selected image to the `profileImage` state variable
+  };
+
+  const handleUploadImage = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const storage = getStorage();
+      const storageRef = ref(storage, `profileImages/${user.uid}`);
+      await uploadBytes(storageRef, profileImage);
+      const downloadURL = await getDownloadURL(storageRef);
+      setProfileImageUrl(downloadURL);
+    } catch (error) {
+      console.log('Error uploading profile image:', error);
+    }
+  };
 
   const logout = () => {
     const auth = getAuth();
@@ -44,26 +84,80 @@ const Profile = ({ navigation }) => {
       });
   };
 
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
   return (
     <SafeAreaView>
       <View>
         <Text style={styles.title}>Profile</Text>
+        <TouchableOpacity onPress={handleEdit} style={styles.editIcon}>
+          <Icon name="edit" size={30} color="#0827F5" />
+        </TouchableOpacity>
+        {profileImageUrl ? (
+          <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
+        ) : (
+          <Text style={styles.noProfileImageText}>No profile image</Text>
+        )}
+        {isEditing && (
+          <View>
+            <TouchableOpacity onPress={handleChooseImage} style={styles.chooseImageButton}>
+              <Text style={styles.buttonText}>Choose Image</Text>
+            </TouchableOpacity>
+            {profileImage && (
+              <TouchableOpacity onPress={handleUploadImage} style={styles.uploadImageButton}>
+                <Text style={styles.buttonText}>Upload Image</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
         <View style={styles.dataContainer}>
           <Text style={styles.dataLabel}>Username:</Text>
-          <Text style={styles.data}>{username}</Text>
+          {isEditing ? (
+            <TextInput
+              style={styles.input}
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+            />
+          ) : (
+            <Text style={styles.data}>{username}</Text>
+          )}
         </View>
         <View style={styles.dataContainer}>
           <Text style={styles.dataLabel}>About Me:</Text>
-          <Text style={styles.data}>{aboutMe}</Text>
+          {isEditing ? (
+            <TextInput
+              style={styles.input}
+              value={aboutMe}
+              onChangeText={(text) => setAboutMe(text)}
+            />
+          ) : (
+            <Text style={styles.data}>{aboutMe}</Text>
+          )}
         </View>
         <View style={styles.dataContainer}>
           <Text style={styles.dataLabel}>Favorite Game:</Text>
-          <Text style={styles.data}>{favoriteGame}</Text>
+          {isEditing ? (
+            <TextInput
+              style={styles.input}
+              value={favoriteGame}
+              onChangeText={(text) => setFavoriteGame(text)}
+            />
+          ) : (
+            <Text style={styles.data}>{favoriteGame}</Text>
+          )}
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button title="Logout" onPress={logout} color="#0827F5" />
-      </View>
+      {isEditing ? (
+        <View style={styles.buttonContainer}>
+          <Button title="Save" onPress={updateProfile} color="#0827F5" />
+        </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <Button title="Logout" onPress={logout} color="#0827F5" />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -76,6 +170,43 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 40,
+  },
+  editIcon: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+  },
+  profileImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  noProfileImageText: {
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  chooseImageButton: {
+    backgroundColor: '#0827F5',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  uploadImageButton: {
+    backgroundColor: '#FF0000',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   buttonContainer: {
     alignSelf: 'center',
@@ -91,10 +222,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   dataLabel: {
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   data: {
     fontSize: 16,
+  },
+  input: {
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 5,
   },
 });
