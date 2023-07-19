@@ -9,7 +9,7 @@ import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 
 
 
-export default function SignUn({ navigation }) {
+export default function SignUp({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [aboutMe, setAboutMe] = useState('');
