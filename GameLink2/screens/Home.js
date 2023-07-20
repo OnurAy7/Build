@@ -14,7 +14,7 @@ export default function Home({}) {
   const [matched, setMatched] = useState(false);
   const currentUser = getAuth().currentUser;
 
-  // Fetch users from Firestore
+  // Fetches users from Firestore database
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -24,8 +24,8 @@ export default function Home({}) {
         const fetchedUsers = [];
         querySnapshot.forEach((doc) => {
           const user = doc.data();
-          if (user.userId !== currentUser.uid) { // Exclude the logged-in user
-            fetchedUsers.push({ ...user, docId: doc.id }); // Add document ID for future updates
+          if (user.userId !== currentUser.uid) { 
+            fetchedUsers.push({ ...user, docId: doc.id }); 
           }
         });
         setUsers(fetchedUsers);
@@ -37,10 +37,8 @@ export default function Home({}) {
   }, []);
 
   const handleMatch = async () => {
-    // Handle match logic here
     const matchedUser = users[currentIndex];
-    const matchedUserId = matchedUser.docId; // Get the document ID of the matched user
-    // Update the matchedUsers field in the user's document
+    const matchedUserId = matchedUser.docId; 
     try {
       const db = getFirestore();
       const userRef = doc(db, 'users', currentUser.uid);
@@ -50,15 +48,15 @@ export default function Home({}) {
     } catch (error) {
       console.log('Error updating matched user:', error);
     }
-    // Move to the next user
+    
     setCurrentIndex(currentIndex + 1);
   };
 
   const handleNotMatch = () => {
-    // Handle not match logic here
+    
     console.log('Skipped user:', users[currentIndex]);
     setMatched(false);
-    // Move to the next user
+    
     setCurrentIndex(currentIndex + 1);
   };
 

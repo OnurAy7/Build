@@ -14,13 +14,13 @@ export default function SignIn({ navigation }) {
   const handleSignIn = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // Access the signed-in user
+      // Access the signed in user
       const user = userCredential.user;
       console.log('Signed in:', user.email);
       navigation.navigate('Home');
 
     } catch (error) {
-      // Handle sign-in errors
+      // Handle sign in errors
       console.error('Sign In Failed:', error.message);
 
       let errorMessage = 'An error occurred. Please try again.';

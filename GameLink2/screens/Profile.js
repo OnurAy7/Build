@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import * as ImagePicker from 'expo-image-picker'; // Import Expo ImagePicker
+import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Profile = ({ navigation }) => {
@@ -97,7 +97,7 @@ const Profile = ({ navigation }) => {
       .then(() => {
         console.log('Logged out');
         Alert.alert('Logged Out');
-        // Navigate to the login screen or any other desired screen
+        
         navigation.navigate('SignIn');
       })
       .catch((error) => {

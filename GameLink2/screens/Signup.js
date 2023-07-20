@@ -19,11 +19,11 @@ export default function SignUp({ navigation }) {
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
+        
         const user = userCredential.user;
         console.log('User created:', user);
   
-        // Save additional user data to Firestore
+        // Saves the data to Firestore
         const db = getFirestore();
         const userRef = doc(collection(db, 'users'), user.uid);
         const userData = {
@@ -51,7 +51,7 @@ export default function SignUp({ navigation }) {
           errorMessage = 'Invalid Email.';
         }
   
-        console.log(error); // Add this line to log the error object
+        console.log(error); 
         Alert.alert('Sign Up Failed', errorMessage);
       });
   };
