@@ -8,18 +8,20 @@ import { auth } from "../firebase";
 import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 
 
-
+// defining SignUp
 export default function SignUp({ navigation }) {
+  // setting up the state variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [aboutMe, setAboutMe] = useState('');
   const [favoriteGame, setFavoriteGame] = useState('');
   const [username, setUsername] = useState('');
 
+  // function to handle sign up
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        
+        // Accessing the created user
         const user = userCredential.user;
         console.log('User created:', user);
   
@@ -40,15 +42,17 @@ export default function SignUp({ navigation }) {
             console.error('Error saving user data:', error);
           });
   
+          // Message for crating the account
         Alert.alert('User Created', 'The user has been successfully created.');
-        navigation.navigate('SignIn');
+        navigation.navigate('SignIn'); // Navigates to signin screen
       })
+      // handles signup errors
       .catch((error) => {
         console.error('Error creating user:', error);
         let errorMessage = 'An error occurred. Please try again.';
   
         if (error.code === 'auth/invalid-email') {
-          errorMessage = 'Invalid Email.';
+          errorMessage = 'Invalid Email.'; // message for an invalid email
         }
   
         console.log(error); 

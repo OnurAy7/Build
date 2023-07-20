@@ -6,7 +6,9 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+// defining Profile
 const Profile = ({ navigation }) => {
+  // setting up the state variables
   const [username, setUsername] = useState('');
   const [aboutMe, setAboutMe] = useState('');
   const [favoriteGame, setFavoriteGame] = useState('');
@@ -14,6 +16,7 @@ const Profile = ({ navigation }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
 
+  // function to fetch user data from firestore database
   const fetchUserData = async () => {
     try {
       const auth = getAuth();
@@ -37,6 +40,7 @@ const Profile = ({ navigation }) => {
     fetchUserData();
   }, []);
 
+  // function to udate the user profile on the firestore database
   const updateProfile = async () => {
     try {
       const auth = getAuth();
@@ -52,6 +56,7 @@ const Profile = ({ navigation }) => {
     }
   };
 
+    // function to handle choosing an image from the device's gallery
   const handleChooseImage = async () => {
     try {
       const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -75,6 +80,7 @@ const Profile = ({ navigation }) => {
     }
   };
 
+  // function to handle uploading the chosen image to firebase Storage
   const handleUploadImage = async () => {
     try {
       const auth = getAuth();
@@ -91,6 +97,7 @@ const Profile = ({ navigation }) => {
     }
   };
 
+  // function to logout the user
   const logout = () => {
     const auth = getAuth();
     signOut(auth)

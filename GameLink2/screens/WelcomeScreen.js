@@ -2,8 +2,10 @@ import { StyleSheet, Image, Text, Button, View, SafeAreaView } from 'react-nativ
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 
+// Defining WelcomeScreen
 export default function WelcomeScreen({ navigation }) {
   return (
+    // Setting up the welcome screen
     <SafeAreaView>
       <Text style={styles.title}>Welcome to GameLink</Text>
       <Text style={styles.message}>
@@ -33,7 +35,7 @@ export default function WelcomeScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
+// Styles for the above
 const styles = StyleSheet.create({
 
     title: {

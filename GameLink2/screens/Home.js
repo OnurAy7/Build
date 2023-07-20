@@ -6,8 +6,9 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import { getFirestore, collection, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 
-
+// defining Home
 export default function Home({}) {
+  // setting up the state variables
   const navigation = useNavigation();
   const [users, setUsers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,6 +37,7 @@ export default function Home({}) {
     fetchUsers();
   }, []);
 
+  // function to handle matching with a user
   const handleMatch = async () => {
     const matchedUser = users[currentIndex];
     const matchedUserId = matchedUser.docId; 
@@ -52,6 +54,7 @@ export default function Home({}) {
     setCurrentIndex(currentIndex + 1);
   };
 
+  // function to handle not matching with a user
   const handleNotMatch = () => {
     
     console.log('Skipped user:', users[currentIndex]);

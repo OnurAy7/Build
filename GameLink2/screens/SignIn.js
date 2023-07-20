@@ -6,21 +6,23 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
 
-
+// Defining SignIn
 export default function SignIn({ navigation }) {
+  // state variables for rmail and password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // function to handle sign in
   const handleSignIn = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // Access the signed in user
+      // Accessing the signed in user
       const user = userCredential.user;
       console.log('Signed in:', user.email);
       navigation.navigate('Home');
 
     } catch (error) {
-      // Handle sign in errors
+      // Handles sign in errors
       console.error('Sign In Failed:', error.message);
 
       let errorMessage = 'An error occurred. Please try again.';
@@ -30,7 +32,7 @@ export default function SignIn({ navigation }) {
         error.code === 'auth/user-not-found' ||
         error.code === 'auth/wrong-password'
       ) {
-        errorMessage = 'Incorrect Email or Password.';
+        errorMessage = 'Incorrect Email or Password.'; // the displayed message for incorrect details
       }
   
       Alert.alert('Sign In Failed', errorMessage);
